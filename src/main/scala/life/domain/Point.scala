@@ -1,4 +1,4 @@
-package pinata
+package life.domain
 
 import cats.Show
 

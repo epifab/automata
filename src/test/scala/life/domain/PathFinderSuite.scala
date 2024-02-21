@@ -1,4 +1,4 @@
-package pinata
+package life.domain
 
 import cats.effect.testing.scalatest.AsyncIOSpec
 import cats.effect.IO
@@ -12,11 +12,11 @@ class PathFinderSuite extends AsyncFreeSpec with AsyncIOSpec with Matchers:
     PathFinder[IO]
       .findPath(
         board = Board(
-          Array(
+          Vector(
             "              ",
             "     0  ....  ",
             "     ....  ..X"
-          ).map(_.toArray)
+          ).map(_.toVector)
         ),
         start = '0',
         goal = 'X',
@@ -30,11 +30,11 @@ class PathFinderSuite extends AsyncFreeSpec with AsyncIOSpec with Matchers:
     PathFinder[IO]
       .findPath(
         board = Board(
-          Array(
+          Vector(
             "..............",
             ".....0........",
             ".............X"
-          ).map(_.toArray)
+          ).map(_.toVector)
         ),
         start = '0',
         goal = 'X',
@@ -48,11 +48,11 @@ class PathFinderSuite extends AsyncFreeSpec with AsyncIOSpec with Matchers:
     PathFinder[IO]
       .findPath(
         board = Board(
-          Array(
+          Vector(
             "...... X .....",
             ".....0   .....",
             ".X...........X"
-          ).map(_.toArray)
+          ).map(_.toVector)
         ),
         start = '0',
         goal = 'X',

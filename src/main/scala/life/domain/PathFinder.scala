@@ -1,9 +1,8 @@
-package pinata
+package life.domain
 
 import cats.data.OptionT
 import cats.effect.std.Queue
-import cats.effect.Async
-import cats.effect.Ref
+import cats.effect.{Async, Ref}
 import cats.syntax.all.*
 
 trait PathFinder[F[_]]:
@@ -79,7 +78,7 @@ object PathFinder:
           toVisit <- Queue.unbounded[F, F[Option[Path]]]
           visited <- Ref.of[F, Set[Point]](Set.empty)
           origin <- board
-            .findFirst(start)
+            .findFirst(_ == start)
             .liftTo[F](new IllegalArgumentException("Starting point not found"))
           _    <- visited.update(_ + origin)
           _    <- toVisit.offer(visitPoint(origin, Path.empty, visited, toVisit))

@@ -1,7 +1,7 @@
-package pinata
+package life.domain
 
-import cats.effect.{IO, IOApp}
 import cats.effect.std.Random
+import cats.effect.{IO, IOApp}
 import cats.implicits.showInterpolator
 import fs2.Stream
 

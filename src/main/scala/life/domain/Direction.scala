@@ -1,4 +1,4 @@
-package pinata
+package life.domain
 
 enum Direction:
   case Left, Right, Up, Down

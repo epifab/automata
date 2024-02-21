@@ -1,11 +1,11 @@
-package pinata
+package life.domain
 
-import cats.effect.{Async, Clock, Concurrent}
-import cats.effect.std.Random
-import cats.syntax.all.*
 import cats.Show
+import cats.effect.std.Random
+import cats.effect.{Async, Clock, Concurrent}
+import cats.syntax.all.*
 import fs2.Stream
-import pinata.Automata.Cell
+import life.domain.Automata.Cell
 
 import scala.collection.immutable.{ListMap, StringOps}
 
