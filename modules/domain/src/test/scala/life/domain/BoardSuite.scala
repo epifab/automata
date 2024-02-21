@@ -9,9 +9,9 @@ class BoardSuite extends AnyFreeSpec with Matchers:
       Vector(
         Vector(4, 1, 2),
         Vector(3, 4, 5),
-        Vector(6, 7, 4)
+        Vector(6, 4, 4)
       )
-    ).find(_ == 4) shouldBe List(Point(0, 0), Point(1, 1), Point(2, 2))
+    ).find(_ == 4) shouldBe List(Point(0, 0), Point(1, 1), Point(2, 1), Point(2, 2))
   }
 
   "findFirst" in {

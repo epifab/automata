@@ -3,10 +3,25 @@ import org.scalajs.linker.interface.ModuleSplitStyle
 ThisBuild / version      := "1.0"
 ThisBuild / scalaVersion := "3.4.0"
 
-lazy val life = (project in file("."))
-  .enablePlugins(ScalaJSPlugin)
+lazy val domain = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("modules/domain"))
   .settings(
-    name := "life",
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "cats-core"                     % "2.10.0",
+      "org.typelevel" %%% "cats-effect"                   % "3.5.2",
+      "co.fs2"        %%% "fs2-core"                      % "3.9.4",
+      "org.typelevel" %%% "cats-effect-testing-scalatest" % "1.5.0" % Test
+    )
+  )
+
+lazy val domainJvm = domain.jvm
+lazy val domainJs  = domain.js
+
+lazy val sdk = (project in file("modules/sdk"))
+  .enablePlugins(ScalaJSPlugin)
+  .dependsOn(domain.js)
+  .settings(
     // Tell Scala.js that this is an application with a main method
     scalaJSUseMainModuleInitializer := false,
     /* Configure Scala.js to emit modules in the optimal way to

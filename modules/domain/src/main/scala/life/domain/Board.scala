@@ -1,24 +1,27 @@
 package life.domain
 
-import cats.{Applicative, Eval, Functor, Monad, Show, Traverse}
+import cats.{Applicative, Show}
+import cats.data.NonEmptyVector
 import cats.syntax.all.*
 
 import scala.annotation.tailrec
-import scala.collection.immutable.ListMap
 import scala.reflect.ClassTag
+import scala.util.Try
 
-case class Board[T](data: Vector[Vector[T]]):
+class Board[T](data: Vector[Vector[T]]):
 
-  lazy val asMap: Map[Point, T] =
+  lazy val asVector: Vector[(Point, T)] =
     data.zipWithIndex.flatMap { case (col, x) =>
       col.zipWithIndex.map { case (value, y) =>
         Point(x, y) -> value
       }
-    }.toMap
+    }
+
+  lazy val asMap: Map[Point, T] =
+    asVector.toMap
 
   def get(point: Point): Option[T] =
-    try data(point.x)(point.y).some
-    catch case _: ArrayIndexOutOfBoundsException => None
+    Try(data(point.x)(point.y)).toOption
 
   def contains(point: Point): Boolean =
     get(point).nonEmpty
@@ -72,10 +75,10 @@ object Board:
   ): F[Board[T]] =
 
     def column(x: Int): F[Vector[T]] =
-      (0 to height).toVector
+      (0 until height).toVector
         .traverse { y => value(Point(x, y)) }
 
-    (0 to width).toVector
+    (0 until width).toVector
       .traverse(x => column(x))
       .map(new Board(_))
 

@@ -2,6 +2,9 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { GameOfLife } from 'scalajs:main.js'
+
+GameOfLife.run(10, 5, (board) => console.log(board));
 
 function App() {
   const [count, setCount] = useState(0)

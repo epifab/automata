@@ -1,8 +1,7 @@
 package life.domain
 
-import cats.data.OptionT
-import cats.effect.std.Queue
 import cats.effect.{Async, Ref}
+import cats.effect.std.Queue
 import cats.syntax.all.*
 
 trait PathFinder[F[_]]:
