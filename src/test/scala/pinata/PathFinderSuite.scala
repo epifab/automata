@@ -1,12 +1,10 @@
 package pinata
 
-import cats.effect.{IO, Ref}
 import cats.effect.testing.scalatest.AsyncIOSpec
+import cats.effect.IO
 import cats.implicits.showInterpolator
 import org.scalatest.freespec.AsyncFreeSpec
 import org.scalatest.matchers.should.Matchers
-
-import Direction.*
 
 class PathFinderSuite extends AsyncFreeSpec with AsyncIOSpec with Matchers:
 

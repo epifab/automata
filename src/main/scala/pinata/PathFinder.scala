@@ -79,7 +79,7 @@ object PathFinder:
           toVisit <- Queue.unbounded[F, F[Option[Path]]]
           visited <- Ref.of[F, Set[Point]](Set.empty)
           origin <- board
-            .findPosition(start)
+            .findFirst(start)
             .liftTo[F](new IllegalArgumentException("Starting point not found"))
           _    <- visited.update(_ + origin)
           _    <- toVisit.offer(visitPoint(origin, Path.empty, visited, toVisit))
