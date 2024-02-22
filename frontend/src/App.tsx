@@ -24,7 +24,7 @@ export function App() {
   const cellHeight = window.innerHeight / boardHeight
 
   useEffect(() => {
-    const cleanup = GameOfLife.run(boardWidth, boardHeight, (b: CellData[]) => setBoard(b))
+    const cleanup = GameOfLife.run(boardWidth, boardHeight, 1, (b: CellData[]) => setBoard(b))
     console.info("Board loaded")
     return () => {
       console.info("Board unloaded")
@@ -39,7 +39,7 @@ export function App() {
 
 function Board({ board, cellWidth, cellHeight }: BoardProps) {
   return (
-    <Stage>
+    <Stage width={window.innerWidth} height={window.innerHeight}>
       <Graphics draw={(g) => {
         board.forEach(cell => {
           const top = cellHeight * cell.y

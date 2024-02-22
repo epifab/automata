@@ -25,7 +25,12 @@ object GameOfLife:
       }*)
 
   @JSExport
-  def run(width: Int, height: Int, callback: js.Function1[JsBoard, Unit]): js.Function0[Unit] =
+  def run(
+      width: Int,
+      height: Int,
+      delays: Int,
+      callback: js.Function1[JsBoard, Unit]
+  ): js.Function0[Unit] =
     import cats.effect.unsafe.implicits.global
 
     val signal = Deferred.unsafe[IO, Either[Throwable, Unit]]
@@ -35,7 +40,7 @@ object GameOfLife:
       _ <- Automata
         .gameOfLife[IO](width, height)
         .run
-        .evalMap(board => IO(callback(board.asJs)) *> IO.sleep(1.second))
+        .evalMap(board => IO(callback(board.asJs)) *> IO.sleep(delays.millis))
         .interruptWhen(signal)
         .compile
         .drain
