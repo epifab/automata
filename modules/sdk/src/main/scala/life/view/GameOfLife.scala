@@ -33,18 +33,15 @@ object GameOfLife:
   ): js.Function0[Unit] =
     import cats.effect.unsafe.implicits.global
 
-    val signal = Deferred.unsafe[IO, Either[Throwable, Unit]]
-
     val program: IO[Unit] = for
       given Random[IO] <- Random.scalaUtilRandom[IO]
       _ <- Automata
         .gameOfLife[IO](width, height)
         .run
         .evalMap(board => IO(callback(board.asJs)) *> IO.sleep(delays.millis))
-        .interruptWhen(signal)
         .compile
         .drain
     yield ()
 
-    program.unsafeRunAndForget()
-    () => signal.complete(Right(())).unsafeRunAndForget()
+    val cancel = program.unsafeRunCancelable()
+    () => cancel()

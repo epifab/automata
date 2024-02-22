@@ -1,9 +1,9 @@
 package life.domain
 
-import cats.Show
-import cats.effect.std.Random
 import cats.effect.{Async, Clock, Concurrent}
+import cats.effect.std.Random
 import cats.syntax.all.*
+import cats.Show
 import fs2.Stream
 import life.domain.Automata.Cell
 
