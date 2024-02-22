@@ -1,7 +1,8 @@
 package life.view
 
+import cats.effect.{Deferred, IO}
 import cats.effect.std.Random
-import cats.effect.IO
+import fs2.concurrent.Signal
 import life.domain.{Automata, Board}
 
 import scala.concurrent.duration.DurationInt
@@ -24,8 +25,10 @@ object GameOfLife:
       }*)
 
   @JSExport
-  def run(width: Int, height: Int, callback: js.Function1[JsBoard, Unit]): Unit =
+  def run(width: Int, height: Int, callback: js.Function1[JsBoard, Unit]): js.Function0[Unit] =
     import cats.effect.unsafe.implicits.global
+
+    val signal = Deferred.unsafe[IO, Either[Throwable, Unit]]
 
     val program: IO[Unit] = for
       given Random[IO] <- Random.scalaUtilRandom[IO]
@@ -33,8 +36,10 @@ object GameOfLife:
         .gameOfLife[IO](width, height)
         .run
         .evalMap(board => IO(callback(board.asJs)) *> IO.sleep(1.second))
+        .interruptWhen(signal)
         .compile
         .drain
     yield ()
 
     program.unsafeRunAndForget()
+    () => signal.complete(Right(())).unsafeRunAndForget()

@@ -1,38 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {useEffect, useState} from 'react'
 import './App.css'
-import { GameOfLife } from 'scalajs:main.js'
+import {GameOfLife} from 'scalajs:main.js'
+import {Graphics, Stage} from '@pixi/react';
 
-GameOfLife.run(10, 5, (board) => console.log(board));
+interface CellData {
+  x: number,
+  y: number,
+  alive: boolean
+}
 
-function App() {
-  const [count, setCount] = useState(0)
+interface BoardProps {
+  board: CellData[]
+  cellWidth: number
+  cellHeight: number
+}
+
+export function App() {
+  const [board, setBoard] = useState<CellData[]>([])
+
+  const boardWidth = 100
+  const boardHeight = 100
+  const cellWidth = window.innerWidth / boardWidth
+  const cellHeight = window.innerHeight / boardHeight
+
+  useEffect(() => {
+    const cleanup = GameOfLife.run(boardWidth, boardHeight, (b: CellData[]) => setBoard(b))
+    console.info("Board loaded")
+    return () => {
+      console.info("Board unloaded")
+      cleanup()
+    }
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Board board={board} cellWidth={cellWidth} cellHeight={cellHeight} />
   )
 }
 
-export default App
+function Board({ board, cellWidth, cellHeight }: BoardProps) {
+  return (
+    <Stage>
+      <Graphics draw={(g) => {
+        board.forEach(cell => {
+          const top = cellHeight * cell.y
+          const bottom = cellHeight * (cell.y + 1)
+          const left = cellWidth * cell.x
+          const right = cellWidth * (cell.x + 1)
+          g.beginFill(cell.alive ? 0xffffff : 0x999999);
+          g.moveTo(left, top)
+          g.lineTo(right, top)
+          g.lineTo(right, bottom)
+          g.lineTo(left, bottom)
+          g.lineTo(left, top)
+          g.endFill();
+        })
+      }} />
+    </Stage>
+  )
+}
