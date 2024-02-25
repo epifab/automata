@@ -9,19 +9,17 @@ playground for scala js + typescript
 - sbt
 - npm
 
-### Run
+### Dev
+
+Modules:
+- [frontend](./frontend): typescript, react frontend app
+- [domain](./modules/domain): pure functional scala model and logic
+- [sdk](./modules/sdk): frontend sdk
+
+### Build / run
 
 ```shell
-cd frontend
-npm run dev
+./build
 ```
 
-Changes made to ts files make vide reload, changes made to scala require manual reload,
-at times you need to clean and re-compile:
-
-```shell
-find . -name target -type d -exec rm -rf {} \;
-sbt clean cleanFiles fastLinkJS
-cd frontend
-npm run dev
-```
+Note: frontend changes make vide reload automatically, changes made to scala require a manual re-build.
