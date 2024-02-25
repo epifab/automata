@@ -8,10 +8,19 @@ import scala.annotation.tailrec
 import scala.reflect.ClassTag
 import scala.util.Try
 
-class Board[T](data: Vector[Vector[T]]):
+case class Board[T](matrix: Vector[Vector[T]]):
+
+  def inverse(default: T): Board[T] =
+    Board(
+      matrix
+        .maxBy(_.length)
+        .indices
+        .toVector
+        .map(col => matrix.map(_.applyOrElse(col, _ => default)))
+    )
 
   lazy val asVector: Vector[(Point, T)] =
-    data.zipWithIndex.flatMap { case (col, x) =>
+    matrix.zipWithIndex.flatMap { case (col, x) =>
       col.zipWithIndex.map { case (value, y) =>
         Point(x, y) -> value
       }
@@ -21,24 +30,24 @@ class Board[T](data: Vector[Vector[T]]):
     asVector.toMap
 
   def get(point: Point): Option[T] =
-    Try(data(point.x)(point.y)).toOption
+    Try(matrix(point.x)(point.y)).toOption
 
   def contains(point: Point): Boolean =
     get(point).nonEmpty
 
   def mapPoint[U](f: Point => U): Board[U] =
-    Board(data.zipWithIndex.map { case (col, x) =>
+    Board(matrix.zipWithIndex.map { case (col, x) =>
       col.zipWithIndex.map { case (_, y) =>
         f(Point(x, y))
       }
     })
 
   def map[U](f: T => U): Board[U] =
-    Board(data.map(_.map(f)))
+    Board(matrix.map(_.map(f)))
 
   def set(point: Point, value: T): Board[T] =
     assert(contains(point))
-    Board(data.zipWithIndex.map { case (col, x) =>
+    Board(matrix.zipWithIndex.map { case (col, x) =>
       col.zipWithIndex.map {
         case (_, y) if x == point.x && y == point.y => value
         case (originalValue, _)                     => originalValue
@@ -46,10 +55,10 @@ class Board[T](data: Vector[Vector[T]]):
     })
 
   def exists(f: T => Boolean): Boolean =
-    data.exists(_.exists(f))
+    matrix.exists(_.exists(f))
 
   def find(f: T => Boolean): Iterable[Point] =
-    data.zipWithIndex.flatMap { case (col, x) =>
+    matrix.zipWithIndex.flatMap { case (col, x) =>
       col.zipWithIndex.collect {
         case (v, y) if f(v) => Point(x, y)
       }

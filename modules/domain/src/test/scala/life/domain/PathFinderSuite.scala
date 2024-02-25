@@ -17,7 +17,7 @@ class PathFinderSuite extends AsyncFreeSpec with AsyncIOSpec with Matchers:
             "     0  ....  ",
             "     ....  ..X"
           ).map(_.toVector)
-        ),
+        ).inverse(' '),
         start = '0',
         goal = 'X',
         walkable = _ == '.'
@@ -35,7 +35,7 @@ class PathFinderSuite extends AsyncFreeSpec with AsyncIOSpec with Matchers:
             ".....0........",
             ".............X"
           ).map(_.toVector)
-        ),
+        ).inverse(' '),
         start = '0',
         goal = 'X',
         walkable = _ == '.'
@@ -53,7 +53,7 @@ class PathFinderSuite extends AsyncFreeSpec with AsyncIOSpec with Matchers:
             ".....0   .....",
             ".X...........X"
           ).map(_.toVector)
-        ),
+        ).inverse(' '),
         start = '0',
         goal = 'X',
         walkable = _ == '.'
@@ -66,7 +66,7 @@ class PathFinderSuite extends AsyncFreeSpec with AsyncIOSpec with Matchers:
     import Fixtures.*
     PathFinder[IO]
       .findPath(
-        board,
+        board.inverse(""),
         start,
         goal,
         !obstacles.contains(_)

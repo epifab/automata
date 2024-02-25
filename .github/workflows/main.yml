@@ -21,7 +21,7 @@ jobs:
           node-version: 18
       - name: Build
         run: |
-          sbt sdk/fullLinkJS
+          sbt test sdk/fullLinkJS
           cp modules/sdk/target/scala-3.4.0/sdk-opt/main.js modules/sdk/src/main/typescript/index.js
           cd modules/sdk/src/main/typescript
           npm link

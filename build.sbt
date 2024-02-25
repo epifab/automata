@@ -43,3 +43,5 @@ lazy val sdk = (project in file("modules/sdk"))
       "org.typelevel" %%% "cats-effect-testing-scalatest" % "1.5.0" % Test
     )
   )
+
+lazy val root = project.in(file(".")).aggregate(domainJvm)
