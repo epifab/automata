@@ -7,7 +7,7 @@ export function App() {
   const [board, setBoard] = useState<CellData[]>([])
 
   const boardWidth = 20
-  const boardHeight = 10
+  const boardHeight = Math.ceil(window.innerHeight / window.innerWidth * boardWidth)
 
   useEffect(() => {
     const cleanup = runGameOfLife(boardWidth, boardHeight, 100, (b: CellData[]) => setBoard(b))
