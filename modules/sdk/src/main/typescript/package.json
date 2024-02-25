@@ -1,0 +1,14 @@
+{
+  "name": "life",
+  "description": "Conway's Game of Life",
+  "author": "epifab solutions",
+  "keywords": ["Conway", "game of life", "automata"],
+  "version": "0.1.0",
+  "dependencies": {
+    "typescript": "^4.9.5"
+  },
+  "main": "./index.js",
+  "exports": "./index.js",
+  "homepage": "https://epifab.github.io/automata/",
+  "repository": "https://github.com/epifab/automata.git"
+}

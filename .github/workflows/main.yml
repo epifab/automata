@@ -1,0 +1,53 @@
+name: Publish to Github pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Setup NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Build
+        run: |
+          sbt sdk/fullLinkJS
+          cp modules/sdk/target/scala-3.4.0/sdk-opt/main.js modules/sdk/src/main/typescript/index.js
+          cd modules/sdk/src/main/typescript
+          npm link
+          cd ../../../../../frontend
+          npm install
+          npm link life
+          npm run build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: frontend/dist
+
+  deploy:
+    needs: build
+
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

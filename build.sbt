@@ -33,7 +33,7 @@ lazy val sdk = (project in file("modules/sdk"))
      */
     scalaJSLinkerConfig ~= {
       _.withModuleKind(ModuleKind.ESModule)
-        .withModuleSplitStyle(ModuleSplitStyle.SmallModulesFor(List("life")))
+//        .withModuleSplitStyle(ModuleSplitStyle.SmallModulesFor(List("life")))
     },
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-core"                     % "2.10.0",

@@ -9,7 +9,6 @@ import scala.concurrent.duration.DurationInt
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 
-@JSExportTopLevel("GameOfLife")
 object GameOfLife:
 
   type JsBoard = js.Array[js.Dictionary[Any]]
@@ -24,7 +23,7 @@ object GameOfLife:
         )
       }*)
 
-  @JSExport
+  @JSExportTopLevel("runGameOfLife")
   def run(
       width: Int,
       height: Int,
