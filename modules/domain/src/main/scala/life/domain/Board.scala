@@ -95,10 +95,11 @@ object Board:
     new Board(
       vector
         .groupBy(_._1.x)
+        .toVector
+        .sortBy(_._1)
         .map { case (_, col) =>
           col.sortBy(_._1.y).map(_._2)
         }
-        .toVector
     )
 
   given [T: Show]: Show[Board[T]] = Show.show { board =>
