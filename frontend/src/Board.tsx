@@ -15,7 +15,7 @@ interface BoardProps {
 
 function Board({board, boardWidth, boardHeight}: BoardProps) {
   const cellWidth = window.innerWidth / boardWidth
-  const cellHeight = window.innerHeight / boardHeight
+  const cellHeight = (window.innerHeight - 50) / boardHeight
 
   return (
     <Stage width={window.innerWidth} height={window.innerHeight - 30}>
