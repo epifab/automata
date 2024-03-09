@@ -28,12 +28,14 @@ object Automata:
       case Dead  => "░"
     }
 
-  def gameOfLife[F[_]: Async: Random](width: Int, height: Int): Automata[F] = new Automata[F]:
-    override def run: Stream[F, Board[Cell]] =
-      Stream.eval(randomBoard).flatMap(recurse)
+  def gameOfLife[F[_]: Async: Random](width: Int, height: Int): F[Automata[F]] =
+    Board
+      .build(_ => Random[F].nextBoolean.map(Cell.apply), width, height)
+      .map(gameOfLife)
 
-    val randomBoard: F[Board[Cell]] =
-      Board.build(_ => Random[F].nextBoolean.map(Cell.apply), width, height)
+  def gameOfLife[F[_]: Async](initialBoard: Board[Cell]): Automata[F] = new Automata[F]:
+    override def run: Stream[F, Board[Cell]] =
+      recurse(initialBoard)
 
     def recurse(board: Board[Cell]): Stream[F, Board[Cell]] =
       if board.exists(_.alive) then

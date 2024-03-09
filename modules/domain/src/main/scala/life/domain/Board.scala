@@ -91,6 +91,16 @@ object Board:
       .traverse(x => column(x))
       .map(new Board(_))
 
+  def fromVector[T](vector: Vector[(Point, T)]): Board[T] =
+    new Board(
+      vector
+        .groupBy(_._1.x)
+        .map { case (_, col) =>
+          col.sortBy(_._1.y).map(_._2)
+        }
+        .toVector
+    )
+
   given [T: Show]: Show[Board[T]] = Show.show { board =>
     @tailrec
     def rec(s: String, y: Int, remaining: List[(Point, T)]): String =

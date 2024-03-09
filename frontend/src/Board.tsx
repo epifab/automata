@@ -18,7 +18,7 @@ function Board({board, boardWidth, boardHeight}: BoardProps) {
   const cellHeight = window.innerHeight / boardHeight
 
   return (
-    <Stage width={window.innerWidth} height={window.innerHeight}>
+    <Stage width={window.innerWidth} height={window.innerHeight - 30}>
       <>
         {board.map(cell =>
             <Cell

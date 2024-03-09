@@ -1,8 +1,6 @@
 # Automata
 
-HERE BE DRAGONS
-
-playground for scala js + typescript
+Playground for scala js and typescript
 
 ## Requirements
 
