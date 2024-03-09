@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import './App.css'
 import {runGameOfLife} from 'life'
 import Board, {CellData} from "./Board.tsx";
@@ -54,7 +54,6 @@ export function App() {
 
   function deactivate() {
     if (active) {
-      console.log(board)
       stop()
       setStop(() => defaultStop)
       setActive(false)
@@ -62,23 +61,16 @@ export function App() {
   }
 
   function resume() {
-    console.log(board)
     activate(board)
   }
 
-  function restart() {
-    activate(randomBoard())
+  function setRandomBoard() {
+    setBoard(randomBoard())
   }
 
   function cleanBoard() {
-    deactivate()
     setBoard(emptyBoard)
   }
-
-  // useEffect(() => {
-  //   const cancel = activate(randomBoard())
-  //   return () => cancel()
-  // }, []);
 
   return (
     <>
@@ -87,8 +79,8 @@ export function App() {
         {active
           ? <button onClick={deactivate}>stop</button>
           : <>
-            <button onClick={resume}>resume</button>
-            <button onClick={restart}>re-start</button>
+            <button onClick={resume}>play</button>
+            <button onClick={setRandomBoard}>random</button>
             <button onClick={cleanBoard}>clean</button>
           </>
         }
